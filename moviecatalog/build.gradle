@@ -3,22 +3,25 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 }
-
 group = 'level1'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
-
 repositories {
 	mavenCentral()
+}
+ext {
+	springCloudVersion = 'Greenwich.RELEASE'
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 }
-
-test {
-	useJUnitPlatform()
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
