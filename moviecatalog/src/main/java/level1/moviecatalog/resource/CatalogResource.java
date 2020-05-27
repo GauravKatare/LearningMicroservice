@@ -1,6 +1,7 @@
 package level1.moviecatalog.resource;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import level1.moviecatalog.models.CatalogItem;
 import level1.moviecatalog.models.Movie;
 import level1.moviecatalog.models.UserRating;
@@ -23,7 +24,11 @@ public class CatalogResource {
     RestTemplate restTemplate;
 
         @RequestMapping("/{userId}")
-        @HystrixCommand(fallbackMethod="getfallbackCatalog")
+        @HystrixCommand(fallbackMethod="getfallbackCatalog",commandProperties ={ @HystrixProperty(name = "execution.isolation.thread.timeoutMilliseconds",value = "2000"),
+                @HystrixProperty(name ="circuitBreaker.requestVolumeThreshold",value ="5"),
+                @HystrixProperty(name ="circuitBreaker.errorThresholdPercentage" ,value ="50"),
+                @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliSeconds",value = "5000")}
+        )
         public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
             UserRating userRating = restTemplate.getForObject("http://ratings-data-service/ratingsdata/user/" + userId, UserRating.class);
 
