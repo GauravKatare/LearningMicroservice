@@ -10,7 +10,7 @@ repositories {
 	mavenCentral()
 }
 ext {
-	springCloudVersion = 'Greenwich.RELEASE'
+	springCloudVersion = 'Hoxton.RELEASE'
 }
 
 dependencies {
